@@ -7,6 +7,7 @@ namespace EstanteLivros.Controllers
 
     public class EstantesAPI : ControllerBase
     {
+        [HttpGet(Name = "GetAutors")]
         public IEnumerable<Autor> GetAutors() 
         {
             return new List<Autor>()
@@ -19,7 +20,8 @@ namespace EstanteLivros.Controllers
                 new Autor{ID=6, NomeAutor= "Inês"}
             };
         }
-
+        
+        [HttpGet(Name = "GetLivros")]
         public IEnumerable<Livro> GetLivros() 
         {
             return new List<Livro>()
