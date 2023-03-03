@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EstanteLivros.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
 
     public class EstantesAPI : ControllerBase
     {
+
         [HttpGet(Name = "GetAutors")]
         public IEnumerable<Autor> GetAutors() 
         {
@@ -35,5 +37,7 @@ namespace EstanteLivros.Controllers
 
             };
         }
+
+        
     }
 }
