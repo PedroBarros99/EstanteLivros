@@ -23,7 +23,9 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Autor>>> GetAutors()
         {
-            return await _context.Autors.ToListAsync();
+            return await _context.Autors
+                .OrderBy(a=> a.NomeAutor)
+                .ToListAsync();
         }
 
         //Obter um só autor
@@ -32,14 +34,14 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Autor>> GetAutors(int id)
         {
-            var autores = await _context.Autors.FindAsync(id);
+            var autor = await _context.Autors.FindAsync(id);
 
-            if (autores == null)
+            if (autor == null)
             {
                 return NotFound();
             }
 
-            return autores;
+            return autor;
         }
 
 
@@ -47,12 +49,12 @@ namespace EstanteLivros.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Autor>> PostAutors(Autor autores)
+        public async Task<ActionResult<Autor>> PostAutors(Autor autor)
         {
-            _context.Autors.Add(autores);
+            _context.Autors.Add(autor);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAutors", new { id = autores.ID }, autores);
+            return CreatedAtAction("GetAutors", new { id = autor.ID }, autor);
         }
 
         //Apagar uma entrada de autor
@@ -61,21 +63,21 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAutors(int id)
         {
-            var autores = await _context.Autors.FindAsync(id);
-            if (autores == null)
+            var autor = await _context.Autors.FindAsync(id);
+            if (autor == null)
             {
                 return NotFound();
             }
 
-            _context.Autors.Remove(autores);
+            _context.Autors.Remove(autor);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool AutorsExists(int id)
+        private bool AutorExists(int id)
         {
-            return _context.Livros.Any(e => e.ID == id);
+            return (_context.Autors?.Any(e => e.ID == id)).GetValueOrDefault();
         }
 
 
@@ -83,14 +85,14 @@ namespace EstanteLivros.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutAutors(int id, Livro autores)
+        public async Task<IActionResult> PutAutors(int id, Autor autor)
         {
-            if (id != autores.ID)
+            if (id != autor.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(autores).State = EntityState.Modified;
+            _context.Entry(autor).State = EntityState.Modified;
 
             try
             {
@@ -98,7 +100,7 @@ namespace EstanteLivros.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AutorsExists(id))
+                if (!AutorExists(id))
                 {
                     return NotFound();
                 }

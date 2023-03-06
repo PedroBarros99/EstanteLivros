@@ -23,7 +23,10 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Livro>>> GetLivros()
         {
-            return await _context.Livros.ToListAsync();
+            return await _context.Livros
+                .Where(l => l.Ativo == true)
+                .OrderBy(l => l.NomeLivro)
+                .ToListAsync();
         }
 
         //Obter um só livro
@@ -41,6 +44,22 @@ namespace EstanteLivros.Controllers
 
             return livros;
         }
+
+        //[HttpGet("{isbn}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<ActionResult<Livro>> GetLivrosPorISBN(string isbn)
+        //{
+        //    //var livros = await _context.Livros.Where(l => l.ISBN == isbn).FirstOrDefault();
+
+        //    if (livros == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return livros;
+        //}
+
 
         //Criar entrada para um livro
         [HttpPost]
@@ -61,13 +80,13 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteLivros(int id)
         {
-            var livros = await _context.Livros.FindAsync(id);
-            if (livros == null)
+            var livro = await _context.Livros.FindAsync(id);
+            if (livro == null)
             {
                 return NotFound();
             }
 
-            _context.Livros.Remove(livros);
+            livro.Ativo = false;
             await _context.SaveChangesAsync();
 
             return NoContent();

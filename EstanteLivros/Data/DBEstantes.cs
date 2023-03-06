@@ -1,5 +1,6 @@
 ﻿using EstanteLivros.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 
 namespace EstanteLivros.Data
@@ -10,11 +11,23 @@ namespace EstanteLivros.Data
 
         public DbSet<Livro> Livros { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public DBEstantes() 
         {
-            optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-PQ0V2OD3\SQLEXPRESS;Initial Catalog=DBEstantes;Integrated Security=True;
-            Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
+
+        public DBEstantes(DbContextOptions<DBEstantes> options)
+            : base(options)
+        {
+        }
+
+        
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) :base(optionsBuilder)
+        //{
+        //optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-PQ0V2OD3\SQLEXPRESS;Initial Catalog=DBEstantes;Integrated Security=True;
+        //Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+        //}
 
     }
 }

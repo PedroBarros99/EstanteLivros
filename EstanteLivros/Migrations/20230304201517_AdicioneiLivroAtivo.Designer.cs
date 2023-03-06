@@ -3,6 +3,7 @@ using EstanteLivros.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EstanteLivros.Migrations
 {
     [DbContext(typeof(DBEstantes))]
-    partial class DBEstantesModelSnapshot : ModelSnapshot
+    [Migration("20230304201517_AdicioneiLivroAtivo")]
+    partial class AdicioneiLivroAtivo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,24 +55,19 @@ namespace EstanteLivros.Migrations
                     b.Property<int>("IDAutor")
                         .HasColumnType("int");
 
-                    b.Property<string>("ISBN")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("ISBN")
+                        .HasColumnType("int");
 
-                    b.Property<string>("NomeLivro")
+                    b.Property<string>("nomeLivro")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("PrecoLivro")
-                        .HasColumnType("decimal(9,2)");
+                    b.Property<decimal>("precoLivro")
+                        .HasColumnType("decimal(15,4)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("IDAutor");
-
-                    b.HasIndex("ISBN")
-                        .IsUnique();
 
                     b.ToTable("Livros");
                 });
