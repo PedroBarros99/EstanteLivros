@@ -3,6 +3,7 @@ using EstanteLivros.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EstanteLivros.Migrations
 {
     [DbContext(typeof(DBEstantes))]
-    partial class DBEstantesModelSnapshot : ModelSnapshot
+    [Migration("20230307201712_MudarPrecoParaInt")]
+    partial class MudarPrecoParaInt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

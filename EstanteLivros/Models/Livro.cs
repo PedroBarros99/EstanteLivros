@@ -28,16 +28,32 @@ namespace EstanteLivros.Models
         [ForeignKey("Autor")]
         public int IDAutor { get; set; }
 
-
-        public Autor Autor { get; set; } = null!;
+        public virtual Autor Autor { get; set; } = null!;
 
         public bool Ativo { get; set; } = true;
 
+        //[Required]
+        //[Column(TypeName = "decimal(9,2)")]
+        //public decimal PrecoLivro 
+        //{ get{ return PrecoLivro; } 
+        //  set {
+        //        if (value < 0)
+        //        {
+        //            throw new Exception("O preço não pode ser negativo");
+        //        }
+        //        else
+        //        {
+        //            PrecoLivro = value;
+        //        }
+        //    }
+        //}
+
         [Required]
-        [Column(TypeName = "decimal(9,2)")]
-        public decimal PrecoLivro 
-        { get{ return PrecoLivro; } 
-          set {
+        public int PrecoLivro
+        {
+            get { return PrecoLivro; }
+            set
+            {
                 if (value < 0)
                 {
                     throw new Exception("O preço não pode ser negativo");

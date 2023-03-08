@@ -23,10 +23,12 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Livro>>> GetLivros()
         {
-            return await _context.Livros
+            var x = await _context.Livros
                 .Where(l => l.Ativo == true)
                 .OrderBy(l => l.NomeLivro)
                 .ToListAsync();
+
+            return x;
         }
 
         //Obter um só livro

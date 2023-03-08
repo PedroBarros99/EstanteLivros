@@ -23,9 +23,11 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Autor>>> GetAutors()
         {
-            return await _context.Autors
-                .OrderBy(a=> a.NomeAutor)
+            var x = await _context.Autors
+                .OrderBy(a => a.NomeAutor)
                 .ToListAsync();
+            
+            return x;
         }
 
         //Obter um só autor

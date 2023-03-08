@@ -21,7 +21,22 @@ namespace EstanteLivros.Data
         {
         }
 
-        
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Autor>(entity =>
+        //    {
+        //        entity.HasOne(d => d.)
+        //            .WithMany(p => p.Boleias)
+        //            .HasForeignKey(d => d.Idviagem)
+        //            .HasConstraintName("FK_Boleias_Viagem");
+        //    });
+
+        //    OnModelCreatingPartial(modelBuilder);
+        //}
+
+        //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) :base(optionsBuilder)
         //{

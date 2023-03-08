@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace EstanteLivros.Models
         [Required]
         public string NomeAutor { get; set; } = null!;
 
-        public ICollection<Livro> Livros { get; set; }
+        [InverseProperty("Autor")]
+        public virtual ICollection<Livro>? Livros { get; set; }
     }
 }

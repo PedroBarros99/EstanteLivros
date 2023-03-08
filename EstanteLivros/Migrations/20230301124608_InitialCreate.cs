@@ -30,9 +30,9 @@ namespace EstanteLivros.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ISBN = table.Column<int>(type: "int", nullable: false),
-                    nomeLivro = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NomeLivro = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IDAutor = table.Column<int>(type: "int", nullable: false),
-                    precoLivro = table.Column<decimal>(type: "decimal(15,4)", nullable: false)
+                    PrecoLivro = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
