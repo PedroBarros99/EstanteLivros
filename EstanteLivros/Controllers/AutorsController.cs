@@ -1,5 +1,8 @@
-﻿using EstanteLivros.Data;
+﻿using AutoMapper;
+using EstanteLivros.Data;
+using EstanteLivros.DTO;
 using EstanteLivros.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +14,21 @@ namespace EstanteLivros.Controllers
     public class AutorsController : ControllerBase
     {
         private readonly DBEstantes _context;
+        private readonly IMapper _mapper;
 
-        public AutorsController(DBEstantes context)
+        //public AutorsController(DBEstantes context)
+        //{
+        //    _context = context;
+        //}
+
+        public AutorsController(DBEstantes context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
         //Obter autores
+        [EnableCors]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,12 +58,14 @@ namespace EstanteLivros.Controllers
         }
 
 
-        //Criar entrada para um autor
+        //Criar entrada para um autorEnableCors
+        [EnableCors]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Autor>> PostAutors(Autor autor)
+        public async Task<ActionResult<Autor>> PostAutors(AutorDTO novoAutor)
         {
+            var autor = _mapper.Map<Autor>(novoAutor);
             _context.Autors.Add(autor);
             await _context.SaveChangesAsync();
 

@@ -1,5 +1,8 @@
-﻿using EstanteLivros.Data;
+﻿using AutoMapper;
+using EstanteLivros.Data;
+using EstanteLivros.DTO;
 using EstanteLivros.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +14,22 @@ namespace EstanteLivros.Controllers
     public class LivrosController : ControllerBase
     {
         private readonly DBEstantes _context;
+        private readonly IMapper _mapper;
 
-        public LivrosController(DBEstantes context)
+        //public LivrosController(DBEstantes context)
+        //{
+        //    _context = context;
+        //}
+
+        public LivrosController(DBEstantes context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
+
         //Lista de Livros
+        [EnableCors]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -26,9 +38,10 @@ namespace EstanteLivros.Controllers
             var x = await _context.Livros
                 .Where(l => l.Ativo == true)
                 .OrderBy(l => l.NomeLivro)
+                .Include("Autor")
                 .ToListAsync();
-
-            return x;
+            return Ok(x);
+            
         }
 
         //Obter um só livro
@@ -64,15 +77,17 @@ namespace EstanteLivros.Controllers
 
 
         //Criar entrada para um livro
+        [EnableCors]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Livro>> PostLivros(Livro livros)
+        public async Task<ActionResult<Livro>> PostLivros(LivroDTO novoLivro)
         {
-            _context.Livros.Add(livros);
+            var livro =_mapper.Map<Livro>(novoLivro);
+            _context.Livros.Add(livro);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAutors", new { id = livros.ID }, livros);
+            return CreatedAtAction("GetAutors", new { id = livro.ID }, livro);
         }
 
 

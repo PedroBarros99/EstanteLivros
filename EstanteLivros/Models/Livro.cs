@@ -32,37 +32,9 @@ namespace EstanteLivros.Models
 
         public bool Ativo { get; set; } = true;
 
-        //[Required]
-        //[Column(TypeName = "decimal(9,2)")]
-        //public decimal PrecoLivro 
-        //{ get{ return PrecoLivro; } 
-        //  set {
-        //        if (value < 0)
-        //        {
-        //            throw new Exception("O preço não pode ser negativo");
-        //        }
-        //        else
-        //        {
-        //            PrecoLivro = value;
-        //        }
-        //    }
-        //}
 
         [Required]
-        public int PrecoLivro
-        {
-            get { return PrecoLivro; }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new Exception("O preço não pode ser negativo");
-                }
-                else
-                {
-                    PrecoLivro = value;
-                }
-            }
-        }
+        [Column(TypeName = "decimal(9,2)")]
+        public decimal PrecoLivro { get; set; }
     }
 }
