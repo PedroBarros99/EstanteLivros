@@ -44,20 +44,39 @@ namespace EstanteLivros.Controllers
             
         }
 
+        [EnableCors]
+        [HttpGet("PesquisarLivros")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Livro>>> GetLivrosPesquisados([FromQuery]string termoPesquisa)
+        {
+            var x = await _context.Livros
+                .Where(l => l.Ativo == true && (l.NomeLivro.Contains(termoPesquisa) || l.ISBN.Contains(termoPesquisa) ))
+                .OrderBy(l => l.NomeLivro)
+                .Include("Autor")
+                .ToListAsync();
+            return Ok(x);
+
+        }
+
         //Obter um só livro
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Livro>> GetLivros(int id)
+        public async Task<ActionResult<LivroDTO>> GetLivro(int id)
         {
-            var livros = await _context.Livros.FindAsync(id);
+            var livro = await _context.Livros.FindAsync(id);
 
-            if (livros == null)
+            if (livro == null)
             {
                 return NotFound();
             }
 
-            return livros;
+            var livrodto = _mapper.Map<LivroDTO>(livro);
+
+            return Ok(livrodto);
+
+            
         }
 
         //[HttpGet("{isbn}")]
@@ -87,7 +106,7 @@ namespace EstanteLivros.Controllers
             _context.Livros.Add(livro);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAutors", new { id = livro.ID }, livro);
+            return CreatedAtAction("GetLivros", new { id = livro.ID }, livro);
         }
 
 
@@ -95,7 +114,7 @@ namespace EstanteLivros.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteLivros(int id)
+        public async Task<IActionResult> DeleteLivro(int id)
         {
             var livro = await _context.Livros.FindAsync(id);
             if (livro == null)
@@ -104,7 +123,23 @@ namespace EstanteLivros.Controllers
             }
 
             livro.Ativo = false;
-            await _context.SaveChangesAsync();
+            _context.Entry(livro).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LivrosExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
@@ -119,14 +154,16 @@ namespace EstanteLivros.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutLivros(int id, Livro livros)
+        public async Task<IActionResult> PutLivro(int id, LivroUpdateDTO livroAlterado)
         {
-            if (id != livros.ID)
+            if (id != livroAlterado.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(livros).State = EntityState.Modified;
+            var livro = _mapper.Map<Livro>(livroAlterado);
+
+            _context.Entry(livro).State = EntityState.Modified;
 
             try
             {

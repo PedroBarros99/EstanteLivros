@@ -16,11 +16,6 @@ namespace EstanteLivros.Controllers
         private readonly DBEstantes _context;
         private readonly IMapper _mapper;
 
-        //public AutorsController(DBEstantes context)
-        //{
-        //    _context = context;
-        //}
-
         public AutorsController(DBEstantes context, IMapper mapper)
         {
             _mapper = mapper;
@@ -38,7 +33,7 @@ namespace EstanteLivros.Controllers
                 .OrderBy(a => a.NomeAutor)
                 .ToListAsync();
             
-            return x;
+            return Ok(x);
         }
 
         //Obter um só autor
@@ -54,7 +49,7 @@ namespace EstanteLivros.Controllers
                 return NotFound();
             }
 
-            return autor;
+            return Ok(autor);
         }
 
 

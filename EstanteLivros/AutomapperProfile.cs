@@ -11,8 +11,14 @@ namespace EstanteLivros
             CreateMap<Livro, LivroDTO>();
             CreateMap<LivroDTO, Livro>();
 
+            CreateMap<Livro, LivroUpdateDTO>();
+            CreateMap<LivroUpdateDTO, Livro>();
+
             CreateMap<Autor, AutorDTO>();
             CreateMap<AutorDTO, Autor>();
+
+            CreateMap<Autor, AutorUpdateDTO>();
+            CreateMap<AutorUpdateDTO, Autor>();
         }
     }
 }
