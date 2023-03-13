@@ -51,7 +51,7 @@ namespace EstanteLivros.Controllers
         public async Task<ActionResult<IEnumerable<Livro>>> GetLivrosPesquisados([FromQuery]string termoPesquisa)
         {
             var x = await _context.Livros
-                .Where(l => l.Ativo == true && (l.NomeLivro.Contains(termoPesquisa) || l.ISBN.Contains(termoPesquisa) ))
+                .Where(l => l.Ativo == true && (l.NomeLivro.ToUpper().Contains(termoPesquisa.ToUpper()) || l.ISBN.ToUpper().Contains(termoPesquisa.ToUpper()) ))
                 .OrderBy(l => l.NomeLivro)
                 .Include("Autor")
                 .ToListAsync();
@@ -156,9 +156,15 @@ namespace EstanteLivros.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutLivro(int id, LivroUpdateDTO livroAlterado)
         {
+            MessagingHelper messaging = new MessagingHelper();
+
+
             if (id != livroAlterado.ID)
             {
-                return BadRequest();
+                messaging.success = false;
+                messaging.message = "O livro não existe na base de dados";
+
+                return Ok(messaging);
             }
 
             var livro = _mapper.Map<Livro>(livroAlterado);

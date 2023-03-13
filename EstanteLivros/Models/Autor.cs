@@ -14,7 +14,7 @@ namespace EstanteLivros.Models
         public int ID { get; set; }
 
         [Required]
-        public string NomeAutor { get; set; } = null!;
+        public string NomeAutor { get; set; }
 
         [InverseProperty("Autor")]
         public virtual ICollection<Livro>? Livros { get; set; }

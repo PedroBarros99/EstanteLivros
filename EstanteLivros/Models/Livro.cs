@@ -22,13 +22,13 @@ namespace EstanteLivros.Models
         public string ISBN { get; set; }
 
         [Required]
-        public string NomeLivro { get; set; } = null!;
+        public string NomeLivro { get; set; }
 
         [Required]
         [ForeignKey("Autor")]
         public int IDAutor { get; set; }
 
-        public virtual Autor Autor { get; set; } = null!;
+        public virtual Autor Autor { get; set; }
 
         public bool Ativo { get; set; } = true;
 

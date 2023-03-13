@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks.Dataflow;
 
 namespace EstanteLivros.Controllers
 {
@@ -95,19 +96,25 @@ namespace EstanteLivros.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutAutors(int id, Autor autor)
+        public async Task<IActionResult> PutAutors(int id, AutorUpdateDTO autor)
         {
+            MessagingHelper messaging = new MessagingHelper();
+            
             if (id != autor.ID)
             {
-                return BadRequest();
-            }
+                messaging.success = false;
+                messaging.message = "O autor não existe na base de dados";
 
-            _context.Entry(autor).State = EntityState.Modified;
+                return Ok(messaging);
+            }
 
             try
             {
+                var autorEditar = _mapper.Map<Autor>(autor);
+                _context.Entry(autorEditar).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
+
             catch (DbUpdateConcurrencyException)
             {
                 if (!AutorExists(id))
